@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrackerLibrary;
 using TrackerLibrary.Interfaces;
+using TrackerLibrary.Models;
 
 namespace TrackerUI
 {
@@ -31,11 +32,10 @@ namespace TrackerUI
 
                 model.PrizeName = prizeNameValue.Text;
                 //model.PrizeType = prizeTypeDropDown.GetItemText(prizeTypeDropDown);
+                model.PrizeType = "defType";
 
-                foreach (IDataConnection db in GlobalConfig.Connections)
-                {
-                    db.CreatePrize(model);
-                }
+                GlobalConfig.Connection.CreatePrize(model);
+
                 prizeNameValue.Text = "";
                 placeNumberValue.Text = "";
                 prizeAmountValue.Text = "0";

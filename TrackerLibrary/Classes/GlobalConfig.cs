@@ -5,27 +5,33 @@ using System.Text;
 using System.Threading.Tasks;
 using TrackerLibrary.Interfaces;
 using TrackerLibrary.Classes;
+using System.Configuration;
 
 namespace TrackerLibrary
 {
     public static class GlobalConfig
     {
-        public static List<IDataConnection> Connections { get; private set; } = new List<IDataConnection>();
-        public static void InitializeConnections(bool database, bool textFiles)
+        public static IDataConnection Connection { get; private set; }
+        public static void InitializeConnections(ConnectionType connectionType)
         {
-            if (database)
+            if (connectionType.Equals(ConnectionType.Sql))
             {
                 // TODO - Set up proper SQL Connector.
                 SqlConnector sql = new SqlConnector();
-                Connections.Add(sql);
+                Connection = sql;
             }
 
-            if (textFiles)
+            else if (connectionType.Equals(ConnectionType.TextFile))
             {
                 // TODO - Set up proper Text Connector.
                 TextConnector file = new TextConnector();
-                Connections.Add(file);
+                Connection = file;
             }
+        }
+
+        public static string ConnString(string name)
+        {
+            return ConfigurationManager.ConnectionStrings[name].ConnectionString;
         }
     }
 }
